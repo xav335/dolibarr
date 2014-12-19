@@ -1783,7 +1783,7 @@ abstract class CommonObject
             $sql.= "(fk_source = '".$sourceid."' AND sourcetype = '".$sourcetype."')";
             $sql.= " ".$clause." (fk_target = '".$targetid."' AND targettype = '".$targettype."')";
         }
-        $sql .= ' ORDER BY sourcetype';
+        $sql .= ' ORDER BY sourcetype,fk_target';
         //print $sql;
 
         dol_syslog(get_class($this)."::fetchObjectLink sql=".$sql);
@@ -2615,11 +2615,11 @@ abstract class CommonObject
         $hookmanager->initHooks(array('commonobject'));        
         $parameters=array();
         $reshook=$hookmanager->executeHooks('showLinkedObjectBlock',$parameters,$this,$action);    // Note that $action and $object may have been modified by hook
-
+		 
         if (empty($reshook))
         {
         	$num = count($this->linkedObjects);
-
+			
         	foreach($this->linkedObjects as $objecttype => $objects)
         	{
         		$tplpath = $element = $subelement = $objecttype;
